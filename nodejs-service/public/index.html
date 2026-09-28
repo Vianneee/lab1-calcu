@@ -2,96 +2,216 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Calculator</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        max-width: 400px;
-        margin: 60px auto;
-      }
-      input,
-      select,
-      button {
-        width: 100%;
-        padding: 8px;
-        margin: 6px 0;
-        font-size: 16px;
-        box-sizing: border-box;
-      }
-      button {
-        cursor: pointer;
-      }
-      #result {
-        margin-top: 20px;
-        padding: 12px;
-        background: #f0f0f0;
-        border-radius: 6px;
-        white-space: pre-wrap;
-        font-family: monospace;
-      }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CalcIQ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Crafty+Girls&family=Fredoka:wght@400;600&family=Nunito+Sans:wght@400;700&family=Alan+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <h2>Calculator</h2>
-    <input type="number" id="num1" placeholder="Number 1" value="0" />
-    <input
-      type="number"
-      id="num2"
-      placeholder="Number 2 (ignored for square root)"
-      value="0"
-    />
-    <select id="operation">
-      <option value="add">Add</option>
-      <option value="subtract">Subtract</option>
-      <option value="multiply">Multiply</option>
-      <option value="divide">Divide</option>
-      <option value="modulo">Modulo</option>
-      <option value="power">Power</option>
-      <option value="square_root">Square Root</option>
-    </select>
-    <button onclick="calculate()">Calculate</button>
-    <div id="result"></div>
+    <div id="stage">
+      <h1 class="app-title">CalcIQ</h1>
 
-    <script>
-      document
-        .getElementById("calcForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
+      <!-- Decorations -->
+      <img
+        class="deco"
+        src="images/pinkstar.png"
+        style="left: 322px; top: 66px; width: 110px"
+        alt=""
+      />
+      <img
+        class="deco"
+        src="images/yellowstar.png"
+        style="left: 52px; top: 146px; width: 70px"
+        alt=""
+      />
+      <img
+        class="deco"
+        src="images/bluestar.png"
+        style="left: 932px; top: 146px; width: 110px"
+        alt=""
+      />
+      <img
+        class="deco"
+        src="images/pinkstar.png"
+        style="left: 1112px; top: 362px; width: 130px"
+        alt=""
+      />
+      <img
+        class="deco"
+        src="images/yellowstar.png"
+        style="left: 880px; top: 540px; width: 70px"
+        alt=""
+      />
+      <img
+        class="deco"
+        src="images/bluestar.png"
+        style="left: 106px; top: 780px; width: 110px"
+        alt=""
+      />
+      <img
+        class="deco"
+        src="images/bluestar.png"
+        style="left: 322px; top: 626px; width: 60px"
+        alt=""
+      />
+      <img
+        class="deco"
+        src="images/pinkstar.png"
+        style="left: 746px; top: 792px; width: 100px"
+        alt=""
+      />
 
-          const num1 = parseFloat(document.getElementById("num1").value);
-          const num2 = parseFloat(document.getElementById("num2").value);
-          const operation = document.getElementById("operation").value;
+      <!-- History note -->
+      <section class="history">
+        <h2>History</h2>
+        <div id="historyList"></div>
+      </section>
+      <img
+        class="deco"
+        src="images/pin.png"
+        style="left: 212px; top: 200px; width: 110px"
+        alt=""
+      />
+      <img
+        class="deco"
+        src="images/lily.png"
+        style="left: 40px; top: 606px; width: 150px"
+        alt=""
+      />
 
-          const symbols = {
-            add: "+",
-            subtract: "-",
-            multiply: "×",
-            divide: "÷",
-            modulo: "%",
-            power: "^",
-          };
+      <!-- Calculator -->
+      <main class="calc">
+        <div class="display">
+          <div id="expr" class="expr"></div>
+          <div id="result" class="result">0</div>
+        </div>
+        <div class="keys">
+          <button class="key tax" data-o="tax_sub" title="Remove tax">
+            T-
+          </button>
+          <button class="key tax" data-o="tax_add" title="Add tax">T+</button>
+          <button class="key fn" data-o="square_root">√</button>
+          <button class="key fn" data-o="percent">%</button>
+          <button class="key clr" data-a="clear">C</button>
 
-          try {
-            const res = await fetch("/calculate", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ num1, num2, operation }),
-            });
-            const data = await res.json();
+          <button class="key fn" data-o="power">x<sup>y</sup></button>
+          <button class="key num" data-d="7">7</button>
+          <button class="key num" data-d="8">8</button>
+          <button class="key num" data-d="9">9</button>
+          <button class="key fn" data-o="divide">÷</button>
 
-            if (!res.ok || data.python_result.status !== "success") {
-              document.getElementById("result").textContent =
-                `Error: ${data.python_result?.message || "Something went wrong"}`;
-            } else {
-              const symbol = symbols[operation] || operation;
-              document.getElementById("result").textContent =
-                `${num1} ${symbol} ${num2} = ${data.python_result.result}`;
-            }
-          } catch (err) {
-            document.getElementById("result").textContent =
-              "Error: could not reach server";
-          }
-        });
-    </script>
+          <button class="key fn" data-o="modulo">mod</button>
+          <button class="key num" data-d="4">4</button>
+          <button class="key num" data-d="5">5</button>
+          <button class="key num" data-d="6">6</button>
+          <button class="key fn" data-o="multiply">×</button>
+
+          <button class="key fn" data-o="sign_toggle">±</button>
+          <button class="key num" data-d="1">1</button>
+          <button class="key num" data-d="2">2</button>
+          <button class="key num" data-d="3">3</button>
+          <button class="key fn" data-o="subtract">−</button>
+
+          <button class="key fn" data-a="back" aria-label="Delete last digit">
+            ⌫
+          </button>
+          <button class="key num" data-d="0">0</button>
+          <button class="key num dot" data-a="dot">.</button>
+          <button class="key eq" data-a="eq">=</button>
+          <button class="key fn" data-o="add">+</button>
+        </div>
+      </main>
+
+      <!-- Help -->
+      <img
+        class="deco"
+        src="images/help.png"
+        style="left: 1168px; top: 696px; width: 250px"
+        alt=""
+      />
+      <button id="helpBtn" class="help-btn" aria-label="How to use CalcIQ">
+        ?
+      </button>
+
+      <p class="dedication">
+        -dedicated to my management accounting bestie&lt;3
+      </p>
+
+      <!-- How to use (scrollable card) -->
+      <div id="guide" class="guide" aria-hidden="true">
+        <div class="guide-card" role="dialog" aria-label="How to use CalcIQ">
+          <h2>How to use CalcIQ</h2>
+          <button id="guideClose" class="guide-close" aria-label="Close guide">
+            <img src="images/exit.png" alt="" />
+          </button>
+          <div class="guide-body">
+            <h3>Keys</h3>
+            <dl>
+              <dt>T+</dt>
+              <dd>
+                Adds tax to an amount. (T means tax)<br />Example: 100, T+, = →
+                112
+              </dd>
+              <dt>T-</dt>
+              <dd>
+                Removes tax from a price that already includes it.<br />Example:
+                112, T-, = → 100
+              </dd>
+              <dt>√</dt>
+              <dd>
+                Gives the square root of the number you typed.<br />Example: 81,
+                √ → 9
+              </dd>
+              <dt>%</dt>
+              <dd>
+                Finds a percent of a number.<br />Example: 200, %, 15, = → 30
+              </dd>
+              <dt>x<sup>y</sup></dt>
+              <dd>
+                Raises a number to a power.<br />Example: 2, x<sup>y</sup>, 3, =
+                → 8
+              </dd>
+              <dt>mod</dt>
+              <dd>
+                Gives the remainder after dividing.<br />Example: 10, mod, 3, =
+                → 1
+              </dd>
+              <dt>±</dt>
+              <dd>
+                Switches between positive and negative.<br />Example: 5, ± → -5
+              </dd>
+              <dt>⌫</dt>
+              <dd>Deletes the last digit.<br />Example: 125, ⌫ → 12</dd>
+              <dt>C</dt>
+              <dd>Clears everything.</dd>
+            </dl>
+            <h3>Tax rate</h3>
+            <p>
+              The default rate is 12% (Philippine VAT). To use a different rate,
+              press T+ or T-, type the rate, then press =.<br />Example: 100,
+              T+, 5, = → 105
+            </p>
+            <h3>History</h3>
+            <p>
+              The note on the left shows your latest calculations, newest first.
+            </p>
+            <h3>Good to know</h3>
+            <ul>
+              <li>
+                You can't divide by zero or take the square root of a negative
+                number. The display shows an error instead.
+              </li>
+              <li>Each number can have only one decimal point.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/app.js"></script>
   </body>
 </html>

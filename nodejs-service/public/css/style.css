@@ -1,0 +1,366 @@
+/* ---------- Colors (from the Figma spec) ---------- */
+:root {
+  --body-pink: #f4c2c2;
+  --display: #836b6b;
+  --result-text: #fff6e5;
+  --expr-text: #f5e1dc;
+  --ink: #2f3a25;
+  --shadow: 90, 60, 60;
+
+  --num-fill: #b3a394;
+  --num-stroke: #9e877c;
+  --num-shadow: #978075;
+  --fn-fill: #9caf88;
+  --fn-stroke: #8f9074;
+  --fn-shadow: #89876e;
+  --tax-fill: #e6cf8b;
+  --tax-stroke: #bfa574;
+  --tax-shadow: #b59b6f;
+  --clr-fill: #b5485d;
+  --clr-stroke: #9c4453;
+  --clr-shadow: #954351;
+  --eq-fill: #6f9160;
+  --eq-stroke: #697955;
+  --eq-shadow: #687353;
+}
+
+/* ---------- Page and 1280x832 stage (scaled to fit by app.js) ---------- */
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #a98b8b;
+}
+
+#stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1280px;
+  height: 832px;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  overflow: hidden;
+  font-family: "Nunito Sans", sans-serif;
+}
+
+#stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("../images/bg.jpg") center / cover no-repeat;
+  opacity: 0.36;
+  pointer-events: none;
+}
+
+.deco {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.app-title {
+  position: absolute;
+  right: 36px;
+  top: 26px;
+  margin: 0;
+  font:
+    400 34px "Crafty Girls",
+    cursive;
+  color: var(--ink);
+}
+
+/* ---------- Calculator ---------- */
+.calc {
+  position: absolute;
+  left: 399px;
+  top: 126px;
+  width: 482px;
+  height: 593px;
+  background: var(--body-pink);
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  box-shadow: 0 12px 24px rgba(var(--shadow), 0.25);
+}
+
+.display {
+  position: absolute;
+  left: 39px;
+  top: 22px; /* 42px / 25px inside the body, minus the 3px border */
+  width: 398px;
+  height: 100px;
+  padding: 10px 16px;
+  background: var(--display);
+  border-radius: 10px;
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.3);
+  font-family: "Fredoka", sans-serif;
+}
+.expr {
+  color: var(--expr-text);
+  font-size: 20px;
+  height: 26px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.result {
+  color: var(--result-text);
+  font-size: 40px;
+  font-weight: 600;
+  text-align: right;
+  margin-top: 6px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.keys {
+  position: absolute;
+  left: 39px;
+  top: 149px;
+  display: grid;
+  grid-template-columns: repeat(5, 64px);
+  grid-template-rows: repeat(5, 65px);
+  column-gap: 19.5px;
+  row-gap: 19.25px;
+}
+
+.key {
+  --fill: var(--num-fill);
+  --stroke: var(--num-stroke);
+  --thick: var(--num-shadow);
+  width: 64px;
+  height: 65px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--fill);
+  border: 2px solid var(--stroke);
+  box-shadow:
+    0 4px 0 var(--thick),
+    0 8px 12px rgba(var(--shadow), 0.2);
+  color: #000;
+  font:
+    700 24px "Nunito Sans",
+    sans-serif;
+  cursor: pointer;
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s,
+    filter 0.15s;
+}
+.key:hover {
+  filter: brightness(1.06);
+}
+.key:active {
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 var(--thick),
+    0 2px 4px rgba(var(--shadow), 0.15);
+}
+.key:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+.key sup {
+  font-size: 13px;
+}
+.key.dot {
+  font-size: 34px;
+  line-height: 1;
+}
+.key.fn {
+  --fill: var(--fn-fill);
+  --stroke: var(--fn-stroke);
+  --thick: var(--fn-shadow);
+}
+.key.tax {
+  --fill: var(--tax-fill);
+  --stroke: var(--tax-stroke);
+  --thick: var(--tax-shadow);
+}
+.key.clr {
+  --fill: var(--clr-fill);
+  --stroke: var(--clr-stroke);
+  --thick: var(--clr-shadow);
+}
+.key.eq {
+  --fill: var(--eq-fill);
+  --stroke: var(--eq-stroke);
+  --thick: var(--eq-shadow);
+}
+.key[data-o="modulo"] {
+  font-size: 18px;
+}
+
+/* ---------- History note ---------- */
+.history {
+  position: absolute;
+  left: 23px;
+  top: 201px;
+  width: 333px;
+  height: 424px;
+  padding: 44px 24px 20px;
+  background: rgba(156, 175, 136, 0.79);
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(var(--shadow), 0.18);
+  font-family: "Fredoka", sans-serif;
+}
+.history h2 {
+  margin: 0 0 8px;
+  text-align: center;
+  font:
+    400 32px "Crafty Girls",
+    cursive;
+  color: var(--ink);
+}
+#historyList {
+  height: 300px;
+  overflow-y: auto;
+  padding-right: 14px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(47, 58, 37, 0.45) transparent;
+}
+#historyList::-webkit-scrollbar {
+  width: 8px;
+}
+#historyList::-webkit-scrollbar-track {
+  background: transparent;
+}
+#historyList::-webkit-scrollbar-thumb {
+  background: rgba(47, 58, 37, 0.45);
+  border-radius: 8px;
+}
+.h-item {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(47, 58, 37, 0.15);
+}
+.h-expr {
+  color: #4a5a3a;
+  font-size: 18px;
+}
+.h-res {
+  color: var(--ink);
+  font-size: 24px;
+  font-weight: 600;
+  text-align: right;
+}
+.h-empty {
+  color: #4a5a3a;
+  font-size: 16px;
+}
+
+/* ---------- Help button, dedication ---------- */
+.help-btn {
+  position: absolute;
+  left: 1102px;
+  top: 606px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  padding: 0;
+  background: #e6cf8b;
+  border: 2px solid #bfa574;
+  box-shadow:
+    0 3px 0 #b59b6f,
+    0 6px 10px rgba(var(--shadow), 0.2);
+  font:
+    700 24px "Nunito Sans",
+    sans-serif;
+  color: #8a5a2b;
+  cursor: pointer;
+  z-index: 3;
+}
+.help-btn:active {
+  transform: translateY(2px);
+}
+.dedication {
+  position: absolute;
+  left: 12px;
+  bottom: 6px;
+  margin: 0;
+  font:
+    700 14px "Nunito Sans",
+    sans-serif;
+  color: var(--ink);
+}
+
+/* ---------- How to use (scrollable card) ---------- */
+.guide {
+  position: absolute;
+  inset: 0;
+  display: none;
+  background: rgba(47, 58, 37, 0.25);
+  z-index: 10;
+}
+.guide.open {
+  display: block;
+}
+.guide-card {
+  position: absolute;
+  left: 70px;
+  top: 64px;
+  width: 1140px;
+  height: 640px;
+  padding: 28px 40px 24px;
+  background: #9caf88;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(var(--shadow), 0.3);
+  font-family: "Alan Sans", "Nunito Sans", sans-serif;
+  color: #000;
+}
+.guide-card h2 {
+  margin: 0 0 12px;
+  font:
+    400 36px "Crafty Girls",
+    cursive;
+}
+.guide-close {
+  position: absolute;
+  right: 22px;
+  top: 14px;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.guide-close img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.guide-body {
+  height: 520px;
+  overflow-y: auto;
+  padding: 0 16px 0 24px;
+  font-size: 20px;
+  line-height: 1.4;
+}
+.guide-body h3 {
+  margin: 18px 0 8px;
+  font-size: 22px;
+}
+.guide-body h3:first-child {
+  margin-top: 0;
+}
+.guide-body dt {
+  font-weight: 700;
+  margin-top: 12px;
+}
+.guide-body dd {
+  margin: 0;
+}
+.guide-body p,
+.guide-body ul {
+  margin: 0;
+}
+.guide-body ul {
+  padding-left: 22px;
+}
+.guide-body sup {
+  font-size: 0.7em;
+}

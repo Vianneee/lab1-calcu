@@ -41,9 +41,11 @@ app.post("/api/calculate", async (req, res) => {
       req.body,
     );
 
-    // Log this calculation to CSV
-    const { num1, num2, operation } = req.body;
-    logToCSV(num1, num2, operation, pythonResponse.data.result);
+    // Log this calculation to CSV (only successful ones)
+    if (pythonResponse.data.status === "success") {
+      const { num1, num2, operation } = req.body;
+      logToCSV(num1, num2, operation, pythonResponse.data.result);
+    }
 
     // Enrich and return response
     res.json({
@@ -58,7 +60,28 @@ app.post("/api/calculate", async (req, res) => {
   }
 });
 
-// Route 3: System status check
+// Route 3: Calculation history from the CSV (newest first)
+app.get("/api/history", (req, res) => {
+  fs.readFile(CSV_PATH, "utf8", (err, data) => {
+    if (err) return res.status(500).json({ error: "Could not read history" });
+
+    const rows = data
+      .trim()
+      .split("\n")
+      .slice(1) // skip the header row
+      .filter((line) => line.trim() !== "")
+      .map((line) => {
+        const [timestamp, num1, num2, operation, result] = line
+          .trim()
+          .split(",");
+        return { timestamp, num1, num2, operation, result };
+      });
+
+    res.json(rows.reverse());
+  });
+});
+
+// Route 4: System status check
 app.get("/api/status", async (req, res) => {
   try {
     const ping = await axios.get(`${PYTHON_URL}/ping`);
