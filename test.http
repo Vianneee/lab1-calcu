@@ -1,0 +1,89 @@
+### Test Addition
+POST http://localhost:3000/api/calculate
+Content-Type: application/json
+
+{
+  "num1": 15,
+  "num2": 5,
+  "operation": "add"
+}
+
+### Test Subtraction
+POST http://localhost:3000/api/calculate
+Content-Type: application/json
+
+{
+  "num1": 15,
+  "num2": 5,
+  "operation": "subtract"
+}
+
+### Test Multiplication
+POST http://localhost:3000/api/calculate
+Content-Type: application/json
+
+{
+  "num1": 15,
+  "num2": 5,
+  "operation": "multiply"
+}
+
+### Test Division
+POST http://localhost:3000/api/calculate
+Content-Type: application/json
+
+{
+  "num1": 15,
+  "num2": 5,
+  "operation": "divide"
+}
+
+### Test Division by Zero
+POST http://localhost:3000/api/calculate
+Content-Type: application/json
+
+{
+  "num1": 15,
+  "num2": 0,
+  "operation": "divide"
+}
+
+### Test with different numbers
+POST http://localhost:3000/api/calculate
+Content-Type: application/json
+
+{
+  "num1": -8.5,
+  "num2": 3,
+  "operation": "multiply"
+}
+
+### Test Modulo
+POST http://localhost:3000/api/calculate
+Content-Type: application/json
+
+{
+  "num1": 17,
+  "num2": 5,
+  "operation": "modulo"
+}
+
+### Test Power
+POST http://localhost:3000/api/calculate
+Content-Type: application/json
+
+{
+  "num1": 2,
+  "num2": 10,
+  "operation": "power"
+}
+
+### Test Square Root
+POST http://localhost:3000/api/calculate
+Content-Type: application/json
+
+{
+  "num1": 64,
+  "num2": 0,
+  "operation": "square_root"
+}
